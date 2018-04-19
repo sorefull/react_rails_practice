@@ -1,13 +1,18 @@
 var Item = React.createClass({
   propTypes: {
-    id: React.PropTypes.node,
-    title: React.PropTypes.node
+    item: React.PropTypes.object
   },
+
   render: function() {
+    const item = this.props.item
+    const deleteUrl = `/items/${item.id}`
+
     return (
-      <li>
-        <b>Id: {this.props.id}</b> Title: {this.props.title}
-      </li>
+      <div>
+        <div>Title: { item.title }</div>
+        <div>Created At: { item.created_at }</div>
+        <a href={ deleteUrl } data-method="delete">Delete</a>
+      </div>
     );
   }
 });
