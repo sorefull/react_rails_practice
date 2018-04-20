@@ -1,17 +1,34 @@
-var NewItem = React.createClass({
-  propTypes: {
-    csrf_token: React.PropTypes.string.isRequired
-  },
+class NewItem extends React.Component {
+  constructor(props) {
+    super(props)
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
 
-  render: function() {
-    const csrf_token = this.props.csrf_token
+  static propTypes: {
+    reloadStateHandler: React.PropTypes.func
+  }
 
+  buildJson() {
+    var object = {}
+    let formData = new FormData(this.myForm)
+    formData.forEach(function(value, key) { object[key] = value })
+    return JSON.stringify({ item: object })
+  }
+
+  handleSubmit(event) {
+    event.preventDefault()
+
+    fetch('/api/items.json', { body: this.buildJson(), method: "POST", headers: {'Content-Type': 'application/json'} })
+      .then((results) => { return results.json() })
+      .then((data) => { this.props.reloadStateHandler(data) })
+  }
+
+  render(){
     return (
-      <form action="/items" method="post">
-        <input type="hidden" name="authenticity_token" value={csrf_token} />
-        <input type="text" name="item[title]" placeholder="Put your junk here..." />
+      <form onSubmit={ this.handleSubmit } ref={(form) => this.myForm = form }>
+        <input type="text" name="title" placeholder="Put your junk here..." />
         <button type="submit">Squirt</button>
       </form>
-    );
+    )
   }
-});
+}

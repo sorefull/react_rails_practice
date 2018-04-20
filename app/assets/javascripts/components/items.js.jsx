@@ -1,24 +1,45 @@
-var Items = React.createClass({
-  propTypes: {
+class Items extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      items: []
+    }
+    this.reloadState = this.reloadState.bind(this)
+  }
+
+  static propTypes: {
     items: React.PropTypes.array
-  },
+  }
+
+  componentDidMount() {
+    fetch('/api/items.json')
+      .then((results) => { return results.json() })
+      .then((data) => { this.setState(data) })
+  }
 
   renderItems(items) {
-    return (items.map((item) => { return this.renderItem(item) }));
-  },
+    return (items.map((item) => { return this.renderItem(item) }))
+  }
 
   renderItem(item) {
-    return (<Item item={ item.item } key= { item.item.id } />);
-  },
+    return (<Item item={ item.item } key={ item.item.id } reloadStateHandler={ this.reloadState } />)
+  }
 
-  render: function() {
-    const items = this.props.items
+  reloadState(data) {
+    this.setState({
+      items: data.items
+    })
+  }
+
+  render() {
+    const { items } = this.state
 
     return (
       <div>
         <div>Items:</div>
         { this.renderItems(items) }
+        <NewItem reloadStateHandler={ this.reloadState } />
       </div>
-    );
+    )
   }
-});
+}
