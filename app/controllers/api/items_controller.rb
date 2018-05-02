@@ -13,6 +13,11 @@ class Api::ItemsController < ApiController
     render_items
   end
 
+  def update
+    item = Item.find(params[:id]).update(item_params)
+    render_items
+  end
+
   private
 
   def render_items

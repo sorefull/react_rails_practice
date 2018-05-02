@@ -12,33 +12,35 @@ class Items extends React.Component {
   }
 
   componentDidMount() {
-    fetch('/api/items.json')
-      .then((results) => { return results.json() })
-      .then((data) => { this.setState(data) })
+    apiIndexItems()
+      .then((results) => {return results.json()})
+      .then((data) => {this.setState(data)})
   }
 
   renderItems(items) {
-    return (items.map((item) => { return this.renderItem(item) }))
+    return (
+      items.map((item) => {return this.renderItem(item)})
+    )
   }
 
   renderItem(item) {
-    return (<Item item={ item.item } key={ item.item.id } reloadStateHandler={ this.reloadState } />)
+    return (
+      <Item item={item.item} key={item.item.id} reloadStateHandler={this.reloadState} />
+    )
   }
 
   reloadState(data) {
-    this.setState({
-      items: data.items
-    })
+    this.setState({items: data.items})
   }
 
   render() {
-    const { items } = this.state
+    const {items} = this.state
 
     return (
       <div>
         <div>Items:</div>
-        { this.renderItems(items) }
-        <NewItem reloadStateHandler={ this.reloadState } />
+        {this.renderItems(items)}
+        <NewItem reloadStateHandler={this.reloadState} />
       </div>
     )
   }

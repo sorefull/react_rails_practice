@@ -1,2 +1,2 @@
 collection @items => :items
-attributes :id, :title, :created_at
+attributes :id, :title
